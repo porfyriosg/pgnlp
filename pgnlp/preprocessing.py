@@ -1,9 +1,9 @@
 import pandas as pd
 from multiprocessing import Pool
 
-from norm import Normalizer
-from clean import Cleaner
-from repl import Placeholder
+from .norm import Normalizer
+from .clean import Cleaner
+from .repl import Placeholder
 
 class Pipeline(Normalizer, Cleaner, Placeholder):
 
