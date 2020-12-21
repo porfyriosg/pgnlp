@@ -9,7 +9,7 @@ class Pipeline(Normalizer, Cleaner, Placeholder):
 
   def __init__(self, *args, **kwargs):
     super(Pipeline, self).__init__()
-    self.template = {
+    self.template = kwargs.get('template', {
       'lowercase_text': True,
       'replace_emoticons': False,
       'replace_numbers': False,
@@ -25,7 +25,7 @@ class Pipeline(Normalizer, Cleaner, Placeholder):
       'remove_dates': True,
       'remove_emoji': False,
       'remove_stopwords': True
-    }
+    })
 
   def check_texts(self, texts=None):
     self.texts_count = len(texts)
