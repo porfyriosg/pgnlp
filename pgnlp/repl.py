@@ -20,7 +20,6 @@ class Placeholder(object):
   def replace_urls(self, text=''):
     text = URLREGEX.sub("<[URL]>",  text)
     text = URLREGEX2.sub("<[URL]>",  text)
-    text = URLREGEX3.sub("<[URL]>", text)
     return text
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

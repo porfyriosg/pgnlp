@@ -30,7 +30,6 @@ class Cleaner(object):
   def remove_urls(self, text=''):
     text = URLREGEX.sub("", text)
     text = URLREGEX2.sub("", text)
-    text = URLREGEX3.sub("", text)
     return text
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
