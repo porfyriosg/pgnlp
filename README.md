@@ -21,7 +21,24 @@ pip install -U .
 ```python
 from pgnlp import preprocessing
 texts = ['<TEXT1>', '<TEXT2>']
-pipe = preprocessing.Pipeline()
+
+template={'lowercase_text': True,
+      'remove_stopwords': False,
+      'replace_emoticons': False, 
+      'remove_emoji': False,
+      'replace_urls': False, 
+      'remove_urls': True,
+      'replace_user_mentions': False, 
+      'remove_user_mentions': True,
+      'replace_hashtags': False, 
+      'remove_hashtags': True,
+      'replace_dates': False, 
+      'remove_dates': True,
+      'replace_numbers': False, 
+      'remove_numbers': False,
+      'remove_punctuations': True}
+
+pipe = preprocessing.Pipeline(template=template)
 results = pipe.execute(texts=texts)
 ```
 -----------------------------------------------------
