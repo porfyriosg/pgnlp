@@ -28,6 +28,7 @@ class Pipeline(Normalizer, Cleaner, Placeholder):
     })
 
   def check_texts(self, texts=None):
+    texts = [txt if isinstance(txt, str) else '' for txt in texts]
     self.texts_count = len(texts)
     ids = range(self.texts_count)
     return zip(ids, texts)
