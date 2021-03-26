@@ -1,5 +1,6 @@
 import os, re, csv, datefinder, emoji, string
 import pandas as pd
+import numpy as np
 from tqdm import tqdm,trange
 from nltk.corpus import stopwords
 
@@ -11,42 +12,26 @@ USERMENTIONREGEX = re.compile(r'[@+]\s{0,1}\w+(\.\w+)*\s*', re.MULTILINE)
 HASHTAGREGEX = re.compile(r'[#+]\s{0,1}\w+(\.\w+)*\s*', re.MULTILINE)
 STOPWORDS = set(stopwords.words('english'))
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-def load_dataset(in_file, edit_columns=[], keep=True):
-  """Function to load dataset CSV files.
-
-  Args:
-      in_file (str): Full file path. Defaults to None.
-      edit_columns (list, optional): Pass columns to keep or drop. Defaults to [].
-      keep (bool, optional): If False will drop edit_columns. Defaults to False.
-
-  Raises:
-      AssertionError: Path doesnt exist.
-      AssertionError: Wrong file
-
-  Returns:
-      pandas.DataFrame: Loaded DataFrame
-  """
-  
-  if isinstance(in_file, str) and in_file.endswith('.csv'):
-    if os.path.exists(in_file):
-      data = pd.read_csv(in_file, low_memory=False)
+def textiter(data:list=[], lowercase:bool=False, text_column:str=None, sheet_name:str=0):
+    strip = str.strip
+    detext = str.lower if lowercase else str
+    if isinstance(data, str):
+        if data.endswith('.csv'):
+            for text in pd.read_csv(data, usecols=[text_column], chunksize=1):
+                text = strip(text.values[0][0])
+                yield detext(text)
+        
+        elif data.endswith(tuple(['.xls', 'xlsx'])):
+            for text in pd.read_excel(data, usecols=[text_column], sheet_name=sheet_name, chunksize=1):
+                text = strip(text.values[0][0])
+                yield detext(text)
+        
+        else:
+            yield detext(strip(data))
     
+    elif isinstance(data, (list, pd.Series, np.ndarray)):
+        for text in map(strip, data):
+            yield detext(text)
+            
     else:
-      raise AssertionError ('File "{}" doesnt exist.'.format(in_file))
-  
-  else:
-    raise AssertionError ('No CSV file passed.')
-  
-  if edit_columns:
-    assert (isinstance(edit_columns, list)), '"edit_columns" should be list.'
-    
-    if keep:
-      edit_columns = [c for c in data.columns.tolist() if c not in edit_columns[:]]
-      
-    data.drop(columns=edit_columns, inplace=True)
-  
-  return data
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        yield ''

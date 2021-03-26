@@ -1,0 +1,8 @@
+scipy
+pandas
+numpy
+nltk
+tqdm
+emoji
+datefinder
+multiprocess
